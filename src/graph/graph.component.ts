@@ -424,7 +424,8 @@ export class GraphComponent extends BaseChartComponent implements AfterViewInit 
       marginx: 20,
       marginy: 20,
       edgesep: 100,
-      ranksep: 100
+      ranksep: 10,
+      align: 'UL',
       // acyclicer: 'greedy',
       // ranker: 'longest-path'
     });
