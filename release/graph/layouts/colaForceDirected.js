@@ -86,6 +86,9 @@ var ColaForceDirectedLayout = /** @class */ (function () {
                 .links(this.internalGraph.links)
                 .alpha(0.5)
                 .on('tick', function () {
+                if (_this.settings.onTickListener) {
+                    _this.settings.onTickListener(_this.internalGraph);
+                }
                 _this.outputGraph$.next(_this.internalGraphToOutputGraph(_this.internalGraph));
             });
             if (this.settings.viewDimensions) {

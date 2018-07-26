@@ -79647,6 +79647,9 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
      */
     GraphComponent.prototype.onDrag = function (event) {
         var _this = this;
+        if (!this.draggingEnabled) {
+            return;
+        }
         var node = this.draggingNode;
         if (this.layout && typeof this.layout !== 'string' && this.layout.onDrag) {
             this.layout.onDrag(node, event);
@@ -79869,6 +79872,9 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
      * @memberOf GraphComponent
      */
     GraphComponent.prototype.onNodeMouseDown = function (event, node) {
+        if (!this.draggingEnabled) {
+            return;
+        }
         this.isDragging = true;
         this.draggingNode = node;
         if (this.layout && typeof this.layout !== 'string' && this.layout.onDragStart) {
@@ -80313,6 +80319,9 @@ var colaForceDirected_ColaForceDirectedLayout = /** @class */ (function () {
                 .links(this.internalGraph.links)
                 .alpha(0.5)
                 .on('tick', function () {
+                if (_this.settings.onTickListener) {
+                    _this.settings.onTickListener(_this.internalGraph);
+                }
                 _this.outputGraph$.next(_this.internalGraphToOutputGraph(_this.internalGraph));
             });
             if (this.settings.viewDimensions) {

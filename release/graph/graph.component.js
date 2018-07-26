@@ -785,6 +785,9 @@ var GraphComponent = /** @class */ (function (_super) {
        */
     function (event) {
         var _this = this;
+        if (!this.draggingEnabled) {
+            return;
+        }
         var node = this.draggingNode;
         if (this.layout && typeof this.layout !== 'string' && this.layout.onDrag) {
             this.layout.onDrag(node, event);
@@ -1206,6 +1209,9 @@ var GraphComponent = /** @class */ (function (_super) {
        * @memberOf GraphComponent
        */
     function (event, node) {
+        if (!this.draggingEnabled) {
+            return;
+        }
         this.isDragging = true;
         this.draggingNode = node;
         if (this.layout && typeof this.layout !== 'string' && this.layout.onDragStart) {
