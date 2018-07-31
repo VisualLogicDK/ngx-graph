@@ -48,7 +48,7 @@ export class ColaForceDirectedLayout implements Layout {
   };
   settings: ColaForceDirectedSettings = {};
 
-  inputGraph: Graph;
+  inputGraph: any;
   outputGraph: Graph;
   internalGraph: ColaGraph & { groupLinks?: Edge[] };
   outputGraph$: Subject<Graph> = new Subject();
@@ -56,10 +56,14 @@ export class ColaForceDirectedLayout implements Layout {
   draggingStart: { x: number, y: number };
 
   run(graph: Graph): Observable<Graph> {
+    console.log("Graph: " + JSON.stringify(graph));
+
     this.inputGraph = graph;
     if (!this.inputGraph.clusters) {
       this.inputGraph.clusters = [];
     }
+    console.log("Constraints: " + this.inputGraph.constraints);
+
     this.internalGraph = {
       nodes: [...this.inputGraph.nodes.map(n => ({
         ...n,
@@ -88,7 +92,19 @@ export class ColaForceDirectedLayout implements Layout {
           target: targetNodeIndex,
         };
       }).filter(x => !!x)] as any,
-      constraints: [...this.inputGraph.nodes.map(n => ({...n}))] as any,
+      constraints: [...this.inputGraph.constraints.map(n => {
+        const sourceNodeIndex = this.inputGraph.nodes.findIndex(node => n.offsets[0].node === node.id);
+        const targetNodeIndex = this.inputGraph.nodes.findIndex(node => n.offsets[1].node === node.id);
+        if (sourceNodeIndex === -1 || targetNodeIndex === -1) {
+          return undefined;
+        }
+
+        let r = {...n};
+        r.offsets[0].node = sourceNodeIndex;
+        r.offsets[1].node = targetNodeIndex;
+
+        return r;
+      })] as any,
       groupLinks: [...this.inputGraph.edges.map(e => {
         const sourceNodeIndex = this.inputGraph.nodes.findIndex(node => e.source === node.id);
         const targetNodeIndex = this.inputGraph.nodes.findIndex(node => e.target === node.id);
@@ -105,6 +121,9 @@ export class ColaForceDirectedLayout implements Layout {
       edgeLabels: [],
     };
     this.outputGraph$.next(this.outputGraph);
+
+    console.log("Constraints: " + this.internalGraph.constraints);
+
     this.settings = Object.assign({}, this.defaultSettings, this.settings);
     if(this.settings.force) {
       this.settings.force = this.settings.force.nodes(this.internalGraph.nodes)

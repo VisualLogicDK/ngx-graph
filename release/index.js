@@ -79200,6 +79200,7 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
      */
     GraphComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log("Constraints10: " + JSON.stringify(this.constraints));
         if (this.update$) {
             this.subscriptions.push(this.update$.subscribe(function () {
                 _this.update();
@@ -79217,14 +79218,15 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
         }
     };
     GraphComponent.prototype.ngOnChanges = function (changes) {
-        var layout = changes.layout, layoutSettings = changes.layoutSettings, nodes = changes.nodes, clusters = changes.clusters, edges = changes.edges;
+        console.log("Constraints9: " + JSON.stringify(this.constraints));
+        var layout = changes.layout, layoutSettings = changes.layoutSettings, nodes = changes.nodes, clusters = changes.clusters, edges = changes.edges, constraints = changes.constraints;
         if (layout) {
             this.setLayout(this.layout);
         }
         if (layoutSettings) {
             this.setLayoutSettings(this.layoutSettings);
         }
-        if (nodes || clusters || edges) {
+        if (nodes || clusters || edges || constraints) {
             this.update();
         }
     };
@@ -79509,8 +79511,10 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
                 }
                 return e;
             }),
-            constraints: this.constraints.slice()
+            constraints: (this.constraints || []).slice().map(function (n) { return n; })
         };
+        console.log("Constraints1: " + JSON.stringify(this.constraints));
+        console.log("Graph4: " + JSON.stringify(this.graph));
         requestAnimationFrame(function () { return _this.draw(); });
     };
     /**
@@ -80278,10 +80282,12 @@ var colaForceDirected_ColaForceDirectedLayout = /** @class */ (function () {
     }
     ColaForceDirectedLayout.prototype.run = function (graph) {
         var _this = this;
+        console.log("Graph: " + JSON.stringify(graph));
         this.inputGraph = graph;
         if (!this.inputGraph.clusters) {
             this.inputGraph.clusters = [];
         }
+        console.log("Constraints: " + this.inputGraph.constraints);
         this.internalGraph = {
             nodes: this.inputGraph.nodes.map(function (n) { return (colaForceDirected___assign({}, n, { width: n.dimension ? n.dimension.width : 20, height: n.dimension ? n.dimension.height : 20 })); }).slice(),
             groups: this.inputGraph.clusters.map(function (cluster) { return ({
@@ -80302,7 +80308,17 @@ var colaForceDirected_ColaForceDirectedLayout = /** @class */ (function () {
                 }
                 return colaForceDirected___assign({}, e, { source: sourceNodeIndex, target: targetNodeIndex });
             }).filter(function (x) { return !!x; }).slice(),
-            constraints: this.inputGraph.nodes.map(function (n) { return (colaForceDirected___assign({}, n)); }).slice(),
+            constraints: this.inputGraph.constraints.map(function (n) {
+                var sourceNodeIndex = _this.inputGraph.nodes.findIndex(function (node) { return n.offsets[0].node === node.id; });
+                var targetNodeIndex = _this.inputGraph.nodes.findIndex(function (node) { return n.offsets[1].node === node.id; });
+                if (sourceNodeIndex === -1 || targetNodeIndex === -1) {
+                    return undefined;
+                }
+                var r = colaForceDirected___assign({}, n);
+                r.offsets[0].node = sourceNodeIndex;
+                r.offsets[1].node = targetNodeIndex;
+                return r;
+            }).slice(),
             groupLinks: this.inputGraph.edges.map(function (e) {
                 var sourceNodeIndex = _this.inputGraph.nodes.findIndex(function (node) { return e.source === node.id; });
                 var targetNodeIndex = _this.inputGraph.nodes.findIndex(function (node) { return e.target === node.id; });
@@ -80319,6 +80335,7 @@ var colaForceDirected_ColaForceDirectedLayout = /** @class */ (function () {
             edgeLabels: [],
         };
         this.outputGraph$.next(this.outputGraph);
+        console.log("Constraints: " + this.internalGraph.constraints);
         this.settings = Object.assign({}, this.defaultSettings, this.settings);
         if (this.settings.force) {
             this.settings.force = this.settings.force.nodes(this.internalGraph.nodes)

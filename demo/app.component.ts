@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   chart: any;
   realTimeData: boolean = false;
   countrySet: any[];
-  graph: Graph;
+  graph: any;
 
   view: any[];
   width: number = 700;
@@ -119,9 +119,34 @@ export class AppComponent implements OnInit {
       chartTypeGroups: chartGroups,
       graph: generateGraph(6)
     });
+    this.graph.constraints = [];
+    this.graph.constraints.push({
+      axis: "x",
+      type: "alignment",
+      offsets: [
+        { node: this.graph.nodes[2].id, offset: 0 },
+        {
+          node: this.graph.nodes[4].id,
+          offset: 1000
+        }
+      ]
+    });
 
+    this.graph.constraints.push({
+      axis: "y",
+      type: "alignment",
+      offsets: [
+        { node: this.graph.nodes[2].id, offset: 0 },
+        {
+          node: this.graph.nodes[4].id,
+          offset: 500
+        }
+      ]
+    });
     this.setColorScheme('picnic');
     this.setInterpolationType('Bundle');
+
+    console.log("Graph1: " + JSON.stringify(this.graph));
   }
 
   ngOnInit() {
@@ -158,9 +183,38 @@ export class AppComponent implements OnInit {
         target: hNode.id,
         label: 'on success'
       });
+      this.graph.constraints = [];
+      this.graph.constraints.push({
+        axis: "x",
+        type: "alignment",
+        offsets: [
+          { node: this.graph.nodes[2].id, offset: 0 },
+          {
+            node: this.graph.nodes[4].id,
+            offset: 1000
+          }
+        ]
+      });
+
+      this.graph.constraints.push({
+        axis: "y",
+        type: "alignment",
+        offsets: [
+          { node: this.graph.nodes[2].id, offset: 0 },
+          {
+            node: this.graph.nodes[4].id,
+            offset: 500
+          }
+        ]
+      });
+
 
       this.graph.edges = [...this.graph.edges];
       this.graph.nodes = [...this.graph.nodes];
+      this.graph.constraints = [...this.graph.constraints];
+
+      console.log("Graph2: " + JSON.stringify(this.graph));
+
     }
   }
 

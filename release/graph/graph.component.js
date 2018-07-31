@@ -135,6 +135,7 @@ var GraphComponent = /** @class */ (function (_super) {
        */
     function () {
         var _this = this;
+        console.log("Constraints10: " + JSON.stringify(this.constraints));
         if (this.update$) {
             this.subscriptions.push(this.update$.subscribe(function () {
                 _this.update();
@@ -152,14 +153,15 @@ var GraphComponent = /** @class */ (function (_super) {
         }
     };
     GraphComponent.prototype.ngOnChanges = function (changes) {
-        var layout = changes.layout, layoutSettings = changes.layoutSettings, nodes = changes.nodes, clusters = changes.clusters, edges = changes.edges;
+        console.log("Constraints9: " + JSON.stringify(this.constraints));
+        var layout = changes.layout, layoutSettings = changes.layoutSettings, nodes = changes.nodes, clusters = changes.clusters, edges = changes.edges, constraints = changes.constraints;
         if (layout) {
             this.setLayout(this.layout);
         }
         if (layoutSettings) {
             this.setLayoutSettings(this.layoutSettings);
         }
-        if (nodes || clusters || edges) {
+        if (nodes || clusters || edges || constraints) {
             this.update();
         }
     };
@@ -528,8 +530,10 @@ var GraphComponent = /** @class */ (function (_super) {
                 }
                 return e;
             }),
-            constraints: this.constraints.slice()
+            constraints: (this.constraints || []).slice().map(function (n) { return n; })
         };
+        console.log("Constraints1: " + JSON.stringify(this.constraints));
+        console.log("Graph4: " + JSON.stringify(this.graph));
         requestAnimationFrame(function () { return _this.draw(); });
     };
     /**

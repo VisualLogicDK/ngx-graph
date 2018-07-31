@@ -1,6 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Graph, Layout } from '../src/ngx-graph.module';
+import { Layout } from '../src/ngx-graph.module';
 export declare class AppComponent implements OnInit {
     version: string;
     theme: string;
@@ -9,7 +9,7 @@ export declare class AppComponent implements OnInit {
     chart: any;
     realTimeData: boolean;
     countrySet: any[];
-    graph: Graph;
+    graph: any;
     view: any[];
     width: number;
     height: number;

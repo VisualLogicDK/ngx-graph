@@ -236,6 +236,8 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
    * @memberOf GraphComponent
    */
   ngOnInit(): void {
+    console.log("Constraints10: " + JSON.stringify(this.constraints));
+
     if (this.update$) {
       this.subscriptions.push(
         this.update$.subscribe(() => {
@@ -261,14 +263,16 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const { layout, layoutSettings, nodes, clusters, edges } = changes;
+    console.log("Constraints9: " + JSON.stringify(this.constraints));
+
+    const { layout, layoutSettings, nodes, clusters, edges, constraints } = changes;
     if (layout) {
       this.setLayout(this.layout);
     }
     if (layoutSettings) {
       this.setLayoutSettings(this.layoutSettings);
     }
-    if (nodes || clusters || edges) {
+    if (nodes || clusters || edges || constraints) {
       this.update();
     }
   }
@@ -569,8 +573,10 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
         }
         return e;
       }),
-      constraints: [...this.constraints]
+      constraints:[...(this.constraints || [])].map(n => {return n;} )
     };
+    console.log("Constraints1: " + JSON.stringify(this.constraints));
+    console.log("Graph4: " + JSON.stringify(this.graph));
 
     requestAnimationFrame(() => this.draw());
   }

@@ -21,7 +21,7 @@ export declare function toNode(nodes: InputNode[], nodeRef: InputNode | number):
 export declare class ColaForceDirectedLayout implements Layout {
     defaultSettings: ColaForceDirectedSettings;
     settings: ColaForceDirectedSettings;
-    inputGraph: Graph;
+    inputGraph: any;
     outputGraph: Graph;
     internalGraph: ColaGraph & {
         groupLinks?: Edge[];
