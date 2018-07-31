@@ -1,5 +1,5 @@
 /**
- * ngx-graph v"5.1.0" (https://github.com/swimlane/ngx-graph)
+ * ngx-graph v"6.0.0" (https://github.com/swimlane/ngx-graph)
  * Copyright 2016
  * Licensed under MIT
  */
@@ -79116,6 +79116,7 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
         _this.nodes = [];
         _this.clusters = [];
         _this.links = [];
+        _this.constraints = [];
         _this.activeEntries = [];
         _this.draggingEnabled = true;
         _this.panningEnabled = true;
@@ -79507,7 +79508,8 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
                     e.id = id_id();
                 }
                 return e;
-            })
+            }),
+            constraints: this.constraints.slice()
         };
         requestAnimationFrame(function () { return _this.draw(); });
     };
@@ -79915,6 +79917,10 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
         Object(core_["Input"])(),
         __metadata("design:type", Array)
     ], GraphComponent.prototype, "links", void 0);
+    graph_component___decorate([
+        Object(core_["Input"])(),
+        __metadata("design:type", Array)
+    ], GraphComponent.prototype, "constraints", void 0);
     graph_component___decorate([
         Object(core_["Input"])(),
         __metadata("design:type", Array)

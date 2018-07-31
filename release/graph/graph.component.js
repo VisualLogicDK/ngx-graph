@@ -30,6 +30,7 @@ var GraphComponent = /** @class */ (function (_super) {
         _this.nodes = [];
         _this.clusters = [];
         _this.links = [];
+        _this.constraints = [];
         _this.activeEntries = [];
         _this.draggingEnabled = true;
         _this.panningEnabled = true;
@@ -526,7 +527,8 @@ var GraphComponent = /** @class */ (function (_super) {
                     e.id = id();
                 }
                 return e;
-            })
+            }),
+            constraints: this.constraints.slice()
         };
         requestAnimationFrame(function () { return _this.draw(); });
     };
@@ -1270,6 +1272,7 @@ var GraphComponent = /** @class */ (function (_super) {
         "nodes": [{ type: Input },],
         "clusters": [{ type: Input },],
         "links": [{ type: Input },],
+        "constraints": [{ type: Input },],
         "activeEntries": [{ type: Input },],
         "curve": [{ type: Input },],
         "draggingEnabled": [{ type: Input },],
