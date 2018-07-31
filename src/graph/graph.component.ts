@@ -110,6 +110,7 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   @Input() nodes: Node[] = [];
   @Input() clusters: ClusterNode[] = [];
   @Input() links: Edge[] = [];
+  @Input() constraints: any[] = [];
   @Input() activeEntries: any[] = [];
   @Input() curve: any;
   @Input() draggingEnabled: boolean = true;
@@ -567,7 +568,8 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
           e.id = id();
         }
         return e;
-      })
+      }),
+      constraints: [...this.constraints]
     };
 
     requestAnimationFrame(() => this.draw());

@@ -27,6 +27,7 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
     nodes: Node[];
     clusters: ClusterNode[];
     links: Edge[];
+    constraints: any[];
     activeEntries: any[];
     curve: any;
     draggingEnabled: boolean;
