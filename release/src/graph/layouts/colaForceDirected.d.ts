@@ -15,6 +15,7 @@ export interface ColaGraph {
     groups: Group[];
     nodes: InputNode[];
     links: Array<Link<number>>;
+    constraints: any[];
 }
 export declare function toNode(nodes: InputNode[], nodeRef: InputNode | number): InputNode;
 export declare class ColaForceDirectedLayout implements Layout {

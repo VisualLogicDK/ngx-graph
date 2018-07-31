@@ -22,6 +22,7 @@ export interface ColaGraph {
   groups: Group[];
   nodes: InputNode[];
   links: Array<Link<number>>;
+  constraints: any[];
 }
 export function toNode(nodes: InputNode[], nodeRef: InputNode | number): InputNode {
   if (typeof nodeRef === 'number') {
@@ -87,6 +88,7 @@ export class ColaForceDirectedLayout implements Layout {
           target: targetNodeIndex,
         };
       }).filter(x => !!x)] as any,
+      constraints: [...this.inputGraph.nodes.map(n => ({...n}))] as any,
       groupLinks: [...this.inputGraph.edges.map(e => {
         const sourceNodeIndex = this.inputGraph.nodes.findIndex(node => e.source === node.id);
         const targetNodeIndex = this.inputGraph.nodes.findIndex(node => e.target === node.id);
@@ -108,6 +110,7 @@ export class ColaForceDirectedLayout implements Layout {
       this.settings.force = this.settings.force.nodes(this.internalGraph.nodes)
         .groups(this.internalGraph.groups)
         .links(this.internalGraph.links)
+        .constraints(this.internalGraph.constraints)
         .alpha(0.5)
         .on('tick', () => {
           if(this.settings.onTickListener) {

@@ -80296,6 +80296,7 @@ var colaForceDirected_ColaForceDirectedLayout = /** @class */ (function () {
                 }
                 return colaForceDirected___assign({}, e, { source: sourceNodeIndex, target: targetNodeIndex });
             }).filter(function (x) { return !!x; }).slice(),
+            constraints: this.inputGraph.nodes.map(function (n) { return (colaForceDirected___assign({}, n)); }).slice(),
             groupLinks: this.inputGraph.edges.map(function (e) {
                 var sourceNodeIndex = _this.inputGraph.nodes.findIndex(function (node) { return e.source === node.id; });
                 var targetNodeIndex = _this.inputGraph.nodes.findIndex(function (node) { return e.target === node.id; });
@@ -80317,6 +80318,7 @@ var colaForceDirected_ColaForceDirectedLayout = /** @class */ (function () {
             this.settings.force = this.settings.force.nodes(this.internalGraph.nodes)
                 .groups(this.internalGraph.groups)
                 .links(this.internalGraph.links)
+                .constraints(this.internalGraph.constraints)
                 .alpha(0.5)
                 .on('tick', function () {
                 if (_this.settings.onTickListener) {
