@@ -84,22 +84,22 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
      * Get the current zoom level
      */
     /**
-     * Set the current zoom level
-     */
+    * Set the current zoom level
+    */
     zoomLevel: number;
     /**
      * Get the current `x` position of the graph
      */
     /**
-     * Set the current `x` position of the graph
-     */
+    * Set the current `x` position of the graph
+    */
     panOffsetX: number;
     /**
      * Get the current `y` position of the graph
      */
     /**
-     * Set the current `y` position of the graph
-     */
+    * Set the current `y` position of the graph
+    */
     panOffsetY: number;
     /**
      * Angular lifecycle event

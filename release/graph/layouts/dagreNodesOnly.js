@@ -58,6 +58,7 @@ var DagreNodesOnlyLayout = /** @class */ (function () {
         return graph;
     };
     DagreNodesOnlyLayout.prototype.updateEdge = function (graph, edge) {
+        var _a, _b, _c, _d;
         var sourceNode = graph.nodes.find(function (n) { return n.id === edge.source; });
         var targetNode = graph.nodes.find(function (n) { return n.id === edge.target; });
         var rankAxis = (this.settings.orientation === 'BT' || this.settings.orientation === 'TB') ? 'y' : 'x';
@@ -93,7 +94,6 @@ var DagreNodesOnlyLayout = /** @class */ (function () {
             matchingEdgeLabel.points = edge.points;
         }
         return graph;
-        var _a, _b, _c, _d;
     };
     DagreNodesOnlyLayout.prototype.createDagreGraph = function (graph) {
         this.dagreGraph = new dagre.graphlib.Graph();
@@ -111,7 +111,9 @@ var DagreNodesOnlyLayout = /** @class */ (function () {
         });
         // Default to assigning a new object as a label for each new edge.
         this.dagreGraph.setDefaultEdgeLabel(function () {
-            return {};
+            return {
+            /* empty */
+            };
         });
         this.dagreNodes = graph.nodes.map(function (n) {
             var node = Object.assign({}, n);

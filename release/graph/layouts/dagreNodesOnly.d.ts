@@ -5,14 +5,14 @@ export declare enum Orientation {
     LEFT_TO_RIGHT = "LR",
     RIGHT_TO_LEFT = "RL",
     TOP_TO_BOTTOM = "TB",
-    BOTTOM_TO_TOM = "BT",
+    BOTTOM_TO_TOM = "BT"
 }
 export declare enum Alignment {
     CENTER = "C",
     UP_LEFT = "UL",
     UP_RIGHT = "UR",
     DOWN_LEFT = "DL",
-    DOWN_RIGHT = "DR",
+    DOWN_RIGHT = "DR"
 }
 export interface DagreSettings {
     orientation?: Orientation;

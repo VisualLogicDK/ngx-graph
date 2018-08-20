@@ -74,7 +74,9 @@ var DagreClusterLayout = /** @class */ (function () {
         });
         // Default to assigning a new object as a label for each new edge.
         this.dagreGraph.setDefaultEdgeLabel(function () {
-            return {};
+            return {
+            /* empty */
+            };
         });
         this.dagreNodes = graph.nodes.map(function (n) {
             var node = Object.assign({}, n);
