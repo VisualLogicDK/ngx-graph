@@ -1,13 +1,25 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 // rename transition due to conflict with d3 transition
 import { animate, style, transition as ngTransition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, Output, QueryList, TemplateRef, ViewChild, ViewChildren, ViewEncapsulation, NgZone, ChangeDetectorRef } from '@angular/core';
@@ -821,68 +833,201 @@ var GraphComponent = /** @class */ (function (_super) {
             this.updateTransform();
         }
     };
-    GraphComponent.decorators = [
-        { type: Component, args: [{
-                    selector: 'ngx-graph',
-                    styleUrls: ['./graph.component.css'],
-                    template: "\n  <ngx-charts-chart [view]=\"[width, height]\" [showLegend]=\"legend\" [legendOptions]=\"legendOptions\" (legendLabelClick)=\"onClick($event)\"\n  (legendLabelActivate)=\"onActivate($event)\" (legendLabelDeactivate)=\"onDeactivate($event)\" mouseWheel (mouseWheelUp)=\"onZoom($event, 'in')\"\n  (mouseWheelDown)=\"onZoom($event, 'out')\">\n  <svg:g *ngIf=\"initialized && graph\" [attr.transform]=\"transform\" (touchstart)=\"onTouchStart($event)\" (touchend)=\"onTouchEnd($event)\"\n    class=\"graph chart\">\n    <defs>\n      <ng-template *ngIf=\"defsTemplate\" [ngTemplateOutlet]=\"defsTemplate\">\n      </ng-template>\n      <svg:path class=\"text-path\" *ngFor=\"let link of graph.edges\" [attr.d]=\"link.textPath\" [attr.id]=\"link.id\">\n      </svg:path>\n    </defs>\n    <svg:rect class=\"panning-rect\" [attr.width]=\"dims.width * 100\" [attr.height]=\"dims.height * 100\" [attr.transform]=\"'translate(' + ((-dims.width || 0) * 50) +',' + ((-dims.height || 0) *50) + ')' \"\n      (mousedown)=\"isPanning = true\" />\n      <svg:g class=\"clusters\">\n        <svg:g #clusterElement *ngFor=\"let node of graph.clusters; trackBy: trackNodeBy\" class=\"node-group\" [id]=\"node.id\" [attr.transform]=\"node.transform\"\n          (click)=\"onClick(node)\">\n          <ng-template *ngIf=\"clusterTemplate\" [ngTemplateOutlet]=\"clusterTemplate\" [ngTemplateOutletContext]=\"{ $implicit: node }\">\n          </ng-template>\n          <svg:g *ngIf=\"!clusterTemplate\" class=\"node cluster\">\n            <svg:rect [attr.width]=\"node.dimension.width\" [attr.height]=\"node.dimension.height\" [attr.fill]=\"node.data?.color\" />\n            <svg:text alignment-baseline=\"central\" [attr.x]=\"10\" [attr.y]=\"node.dimension.height / 2\">{{node.label}}</svg:text>\n          </svg:g>\n        </svg:g>\n      </svg:g>\n      <svg:g class=\"links\">\n      <svg:g #linkElement *ngFor=\"let link of graph.edges; trackBy: trackLinkBy\" class=\"link-group\" [id]=\"link.id\">\n        <ng-template *ngIf=\"linkTemplate\" [ngTemplateOutlet]=\"linkTemplate\" [ngTemplateOutletContext]=\"{ $implicit: link }\">\n        </ng-template>\n        <svg:path *ngIf=\"!linkTemplate\" class=\"edge\" [attr.d]=\"link.line\" />\n      </svg:g>\n    </svg:g>\n    <svg:g class=\"nodes\">\n      <svg:g #nodeElement *ngFor=\"let node of graph.nodes; trackBy: trackNodeBy\" class=\"node-group\" [id]=\"node.id\" [attr.transform]=\"node.transform\"\n        (click)=\"onClick(node)\" (mousedown)=\"onNodeMouseDown($event, node)\">\n        <ng-template *ngIf=\"nodeTemplate\" [ngTemplateOutlet]=\"nodeTemplate\" [ngTemplateOutletContext]=\"{ $implicit: node }\">\n        </ng-template>\n        <svg:circle *ngIf=\"!nodeTemplate\" r=\"10\" [attr.cx]=\"node.dimension.width / 2\" [attr.cy]=\"node.dimension.height / 2\" [attr.fill]=\"node.data?.color\"\n        />\n      </svg:g>\n    </svg:g>\n  </svg:g>\n</ngx-charts-chart>\n  ",
-                    encapsulation: ViewEncapsulation.None,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    animations: [trigger('link', [ngTransition('* => *', [animate(500, style({ transform: '*' }))])])]
-                },] },
-    ];
-    /** @nocollapse */
-    GraphComponent.ctorParameters = function () { return [
-        { type: ElementRef },
-        { type: NgZone },
-        { type: ChangeDetectorRef },
-        { type: LayoutService }
-    ]; };
-    GraphComponent.propDecorators = {
-        legend: [{ type: Input }],
-        nodes: [{ type: Input }],
-        clusters: [{ type: Input }],
-        links: [{ type: Input }],
-        constraints: [{ type: Input }],
-        activeEntries: [{ type: Input }],
-        curve: [{ type: Input }],
-        draggingEnabled: [{ type: Input }],
-        nodeHeight: [{ type: Input }],
-        nodeMaxHeight: [{ type: Input }],
-        nodeMinHeight: [{ type: Input }],
-        nodeWidth: [{ type: Input }],
-        nodeMinWidth: [{ type: Input }],
-        nodeMaxWidth: [{ type: Input }],
-        panningEnabled: [{ type: Input }],
-        enableZoom: [{ type: Input }],
-        zoomSpeed: [{ type: Input }],
-        minZoomLevel: [{ type: Input }],
-        maxZoomLevel: [{ type: Input }],
-        autoZoom: [{ type: Input }],
-        panOnZoom: [{ type: Input }],
-        autoCenter: [{ type: Input }],
-        update$: [{ type: Input }],
-        center$: [{ type: Input }],
-        zoomToFit$: [{ type: Input }],
-        layout: [{ type: Input }],
-        layoutSettings: [{ type: Input }],
-        activate: [{ type: Output }],
-        deactivate: [{ type: Output }],
-        linkTemplate: [{ type: ContentChild, args: ['linkTemplate',] }],
-        nodeTemplate: [{ type: ContentChild, args: ['nodeTemplate',] }],
-        clusterTemplate: [{ type: ContentChild, args: ['clusterTemplate',] }],
-        defsTemplate: [{ type: ContentChild, args: ['defsTemplate',] }],
-        chart: [{ type: ViewChild, args: [ChartComponent, { read: ElementRef },] }],
-        nodeElements: [{ type: ViewChildren, args: ['nodeElement',] }],
-        linkElements: [{ type: ViewChildren, args: ['linkElement',] }],
-        groupResultsBy: [{ type: Input }],
-        zoomLevel: [{ type: Input, args: ['zoomLevel',] }],
-        panOffsetX: [{ type: Input, args: ['panOffsetX',] }],
-        panOffsetY: [{ type: Input, args: ['panOffsetY',] }],
-        onMouseMove: [{ type: HostListener, args: ['document:mousemove', ['$event'],] }],
-        onTouchMove: [{ type: HostListener, args: ['document:touchmove', ['$event'],] }],
-        onMouseUp: [{ type: HostListener, args: ['document:mouseup',] }]
-    };
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "legend", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], GraphComponent.prototype, "nodes", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], GraphComponent.prototype, "clusters", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], GraphComponent.prototype, "links", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], GraphComponent.prototype, "constraints", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], GraphComponent.prototype, "activeEntries", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], GraphComponent.prototype, "curve", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "draggingEnabled", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "nodeHeight", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "nodeMaxHeight", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "nodeMinHeight", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "nodeWidth", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "nodeMinWidth", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "nodeMaxWidth", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "panningEnabled", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "enableZoom", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "zoomSpeed", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "minZoomLevel", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], GraphComponent.prototype, "maxZoomLevel", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "autoZoom", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "panOnZoom", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], GraphComponent.prototype, "autoCenter", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Observable)
+    ], GraphComponent.prototype, "update$", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Observable)
+    ], GraphComponent.prototype, "center$", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Observable)
+    ], GraphComponent.prototype, "zoomToFit$", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], GraphComponent.prototype, "layout", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], GraphComponent.prototype, "layoutSettings", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", EventEmitter)
+    ], GraphComponent.prototype, "activate", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", EventEmitter)
+    ], GraphComponent.prototype, "deactivate", void 0);
+    __decorate([
+        ContentChild('linkTemplate'),
+        __metadata("design:type", TemplateRef)
+    ], GraphComponent.prototype, "linkTemplate", void 0);
+    __decorate([
+        ContentChild('nodeTemplate'),
+        __metadata("design:type", TemplateRef)
+    ], GraphComponent.prototype, "nodeTemplate", void 0);
+    __decorate([
+        ContentChild('clusterTemplate'),
+        __metadata("design:type", TemplateRef)
+    ], GraphComponent.prototype, "clusterTemplate", void 0);
+    __decorate([
+        ContentChild('defsTemplate'),
+        __metadata("design:type", TemplateRef)
+    ], GraphComponent.prototype, "defsTemplate", void 0);
+    __decorate([
+        ViewChild(ChartComponent, { read: ElementRef }),
+        __metadata("design:type", ElementRef)
+    ], GraphComponent.prototype, "chart", void 0);
+    __decorate([
+        ViewChildren('nodeElement'),
+        __metadata("design:type", QueryList)
+    ], GraphComponent.prototype, "nodeElements", void 0);
+    __decorate([
+        ViewChildren('linkElement'),
+        __metadata("design:type", QueryList)
+    ], GraphComponent.prototype, "linkElements", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Function)
+    ], GraphComponent.prototype, "groupResultsBy", void 0);
+    __decorate([
+        Input('zoomLevel'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], GraphComponent.prototype, "zoomLevel", null);
+    __decorate([
+        Input('panOffsetX'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], GraphComponent.prototype, "panOffsetX", null);
+    __decorate([
+        Input('panOffsetY'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], GraphComponent.prototype, "panOffsetY", null);
+    __decorate([
+        HostListener('document:mousemove', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [MouseEvent]),
+        __metadata("design:returntype", void 0)
+    ], GraphComponent.prototype, "onMouseMove", null);
+    __decorate([
+        HostListener('document:touchmove', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [TouchEvent]),
+        __metadata("design:returntype", void 0)
+    ], GraphComponent.prototype, "onTouchMove", null);
+    __decorate([
+        HostListener('document:mouseup'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [MouseEvent]),
+        __metadata("design:returntype", void 0)
+    ], GraphComponent.prototype, "onMouseUp", null);
+    GraphComponent = __decorate([
+        Component({
+            selector: 'ngx-graph',
+            styleUrls: ['./graph.component.css'],
+            template: "\n  <ngx-charts-chart [view]=\"[width, height]\" [showLegend]=\"legend\" [legendOptions]=\"legendOptions\" (legendLabelClick)=\"onClick($event)\"\n  (legendLabelActivate)=\"onActivate($event)\" (legendLabelDeactivate)=\"onDeactivate($event)\" mouseWheel (mouseWheelUp)=\"onZoom($event, 'in')\"\n  (mouseWheelDown)=\"onZoom($event, 'out')\">\n  <svg:g *ngIf=\"initialized && graph\" [attr.transform]=\"transform\" (touchstart)=\"onTouchStart($event)\" (touchend)=\"onTouchEnd($event)\"\n    class=\"graph chart\">\n    <defs>\n      <ng-template *ngIf=\"defsTemplate\" [ngTemplateOutlet]=\"defsTemplate\">\n      </ng-template>\n      <svg:path class=\"text-path\" *ngFor=\"let link of graph.edges\" [attr.d]=\"link.textPath\" [attr.id]=\"link.id\">\n      </svg:path>\n    </defs>\n    <svg:rect class=\"panning-rect\" [attr.width]=\"dims.width * 100\" [attr.height]=\"dims.height * 100\" [attr.transform]=\"'translate(' + ((-dims.width || 0) * 50) +',' + ((-dims.height || 0) *50) + ')' \"\n      (mousedown)=\"isPanning = true\" />\n      <svg:g class=\"clusters\">\n        <svg:g #clusterElement *ngFor=\"let node of graph.clusters; trackBy: trackNodeBy\" class=\"node-group\" [id]=\"node.id\" [attr.transform]=\"node.transform\"\n          (click)=\"onClick(node)\">\n          <ng-template *ngIf=\"clusterTemplate\" [ngTemplateOutlet]=\"clusterTemplate\" [ngTemplateOutletContext]=\"{ $implicit: node }\">\n          </ng-template>\n          <svg:g *ngIf=\"!clusterTemplate\" class=\"node cluster\">\n            <svg:rect [attr.width]=\"node.dimension.width\" [attr.height]=\"node.dimension.height\" [attr.fill]=\"node.data?.color\" />\n            <svg:text alignment-baseline=\"central\" [attr.x]=\"10\" [attr.y]=\"node.dimension.height / 2\">{{node.label}}</svg:text>\n          </svg:g>\n        </svg:g>\n      </svg:g>\n      <svg:g class=\"links\">\n      <svg:g #linkElement *ngFor=\"let link of graph.edges; trackBy: trackLinkBy\" class=\"link-group\" [id]=\"link.id\">\n        <ng-template *ngIf=\"linkTemplate\" [ngTemplateOutlet]=\"linkTemplate\" [ngTemplateOutletContext]=\"{ $implicit: link }\">\n        </ng-template>\n        <svg:path *ngIf=\"!linkTemplate\" class=\"edge\" [attr.d]=\"link.line\" />\n      </svg:g>\n    </svg:g>\n    <svg:g class=\"nodes\">\n      <svg:g #nodeElement *ngFor=\"let node of graph.nodes; trackBy: trackNodeBy\" class=\"node-group\" [id]=\"node.id\" [attr.transform]=\"node.transform\"\n        (click)=\"onClick(node)\" (mousedown)=\"onNodeMouseDown($event, node)\">\n        <ng-template *ngIf=\"nodeTemplate\" [ngTemplateOutlet]=\"nodeTemplate\" [ngTemplateOutletContext]=\"{ $implicit: node }\">\n        </ng-template>\n        <svg:circle *ngIf=\"!nodeTemplate\" r=\"10\" [attr.cx]=\"node.dimension.width / 2\" [attr.cy]=\"node.dimension.height / 2\" [attr.fill]=\"node.data?.color\"\n        />\n      </svg:g>\n    </svg:g>\n  </svg:g>\n</ngx-charts-chart>\n  ",
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            animations: [trigger('link', [ngTransition('* => *', [animate(500, style({ transform: '*' }))])])]
+        }),
+        __metadata("design:paramtypes", [ElementRef,
+            NgZone,
+            ChangeDetectorRef,
+            LayoutService])
+    ], GraphComponent);
     return GraphComponent;
 }(BaseChartComponent));
 export { GraphComponent };
