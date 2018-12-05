@@ -71291,7 +71291,8 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
      *
      * @memberOf GraphComponent
      */
-    GraphComponent.prototype.onTouchMove = function ($event) {
+    GraphComponent.prototype.onTouchMove = function (event) {
+        var $event = event;
         if (this.isPanning && this.panningEnabled) {
             var clientX = $event.changedTouches[0].clientX;
             var clientY = $event.changedTouches[0].clientY;
@@ -71534,7 +71535,7 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
     graph_component___decorate([
         Object(core_["HostListener"])('document:touchmove', ['$event']),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [TouchEvent]),
+        __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], GraphComponent.prototype, "onTouchMove", null);
     graph_component___decorate([

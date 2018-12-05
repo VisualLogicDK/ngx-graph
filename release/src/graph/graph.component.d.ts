@@ -329,7 +329,7 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
      *
      * @memberOf GraphComponent
      */
-    onTouchMove($event: TouchEvent): void;
+    onTouchMove(event: any): void;
     /**
      * On touch end event to disable panning.
      *
